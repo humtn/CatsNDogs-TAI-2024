@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QWidget,
     QPushButton,
-    QMessageBox,
+    QMessageBox, 
     QVBoxLayout,
     QApplication,
     QLabel,

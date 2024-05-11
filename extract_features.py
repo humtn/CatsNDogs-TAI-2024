@@ -35,7 +35,7 @@ def extract_features(model, dataloader):
             features.append(extracted_features)
             labels.append(targets)
     return torch.cat(features), torch.cat(labels)
-
+ 
 # Load training and test datasets (no augmentation)
 train_dataset = datasets.ImageFolder(root=train_dir, transform=data_transforms)
 test_dataset = datasets.ImageFolder(root=test_dir, transform=data_transforms)

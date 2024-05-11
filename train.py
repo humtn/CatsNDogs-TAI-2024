@@ -1,9 +1,7 @@
 import sys
-
 import pandas as pd
 import shutil
 import os
-
 import torch
 import torch.optim as optim
 from torchvision import datasets, transforms
