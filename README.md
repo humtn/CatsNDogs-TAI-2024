@@ -14,3 +14,5 @@ This repository is composed of :
 Additionally, if one wants to re-run the feature extraction on the input dataset (those features are provided within this repository), one must download the training dataset (not included in this repository for storage reasons) from [Kaggle](https://www.kaggle.com/datasets/chetankv/dogs-cats-images/data) and place it in the `dataset` folder (splitting the training and testing accordingly to `/test` and `/train`). The feature extraction component is located within `training.ipynb` and will output the files containing the features in `/features`.
 
 The folder `/images_to_predict` contains some basic images to test our classifier.
+
+This repository can be run in an environement with the following requirements: `torch` (1.13.1),`torchvision` (0.14.1),`matplotlib` (3.5.3), `scikit-learn` (1.0.2), `tqdm` (4.6.22),`numpy` (1.21.5), `pandas` (1.3.5), `pillow` (9.2.0), `PyQt5` (5.15.9) and Python (3.7.13).
