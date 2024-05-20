@@ -1,0 +1,1 @@
+The dataset used for the training of the model can be downloaded at [Kaggle](https://www.kaggle.com/datasets/chetankv/dogs-cats-images/data)

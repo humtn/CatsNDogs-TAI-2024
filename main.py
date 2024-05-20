@@ -19,11 +19,14 @@ import shutil
 import os
 
 import torch
+import torch.nn as nn
+
 from torchvision import datasets, transforms
 from torchvision.models import vgg16, VGG16_Weights
-import torch.nn as nn
+
 from PIL import Image 
 
+# Classifier. 
 class cats_vs_dogs(nn.Module):
     def __init__(self, input_size, hidden_size, output_size, dropout):
         super(cats_vs_dogs, self).__init__()
@@ -41,7 +44,10 @@ class cats_vs_dogs(nn.Module):
 vgg = vgg16(weights=VGG16_Weights.IMAGENET1K_V1) # Initialize VGG16 model with pre-trained weights
 vgg.eval() # disables features like dropout and batch normalization updates
 
+# Instance of the classifier with optimal hidden_size and dropout parameters.
 pre_trained = cats_vs_dogs(1000, hidden_size=512, output_size=1, dropout=0.3)
+
+# Load the weights from the model into our model.
 pre_trained.load_state_dict(torch.load('final_model'))
 
 # Convert resized images to tensors and normalize pixel values
@@ -92,8 +98,6 @@ class PredictTab(QWidget):
         hWidget4.setFixedHeight(25)
         hLayout4 = QHBoxLayout(hWidget4)
         hLayout4.setContentsMargins(0, 0, 0, 0)
-        # hWidget.setStyleSheet("border: 1px solid red; padding: 0 0 0 0; margin: 0px;")
-
         loadButton = QPushButton("Select picture(s)")
         predButton = QPushButton("Predict")
         exportButton = QPushButton("Export")
@@ -135,13 +139,12 @@ class PredictTab(QWidget):
             elif len(self.imgPath) == 1:
                 self.nextButton.setEnabled(False)
             self.updatePixmap(self.imgPath[self.imgIndex])
-            # if self.cnn is not None:
-            # self.predict()
 
     def updatePixmap(self, path, pred=1000):
         self.imgLabel.setPixmap(QtGui.QPixmap(path).scaled(500, 500))
-        # self.imgLabel.setScaledContents(True)
         self.predLabel.setText(str(self.predictions[self.imgIndex]))
+
+        # Prediction boundary set to 0.5. >0.5 => "dog", < 0.5 => "cat"
         if pred < 0.5:
             self.predLabel.setText(
                 f"I think it's a Cat! Confidence: {(1.0-pred)*100:.0f}%"
@@ -155,9 +158,15 @@ class PredictTab(QWidget):
 
     def predict(self):
         if len(self.imgPath) > 0:
+
+            # Extract the 1000 features from the current image. 
             img = vgg(torch.unsqueeze(data_transforms(Image.open(self.imgPath[self.imgIndex])), 0))
             try:
+
+                # Fetch the prediction value from our classifier.
                 self.predictions[self.imgIndex] = pre_trained(img).detach().numpy()[0][0]
+
+                # Forward the prediction value.
                 self.updatePixmap(
                     self.imgPath[self.imgIndex], self.predictions[self.imgIndex]
                 )
@@ -165,13 +174,13 @@ class PredictTab(QWidget):
                 QMessageBox(
                     QMessageBox.Warning,
                     "Error",
-                    "Cannot convert image, please select a valid image",
+                    "Cannot convert image, please select a valid image.",
                 ).exec_()
         else:
             QMessageBox(
                 QMessageBox.Warning,
                 "Error",
-                "Please select an image and a neural network model before making prediction",
+                "Please select an image before making a prediction.",
             ).exec_()
 
     def nextImg(self):
