@@ -1,0 +1,1 @@
+This folder contains the features of the training dataset from VGG16.
